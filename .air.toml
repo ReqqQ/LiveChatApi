@@ -1,0 +1,16 @@
+# live-api/.air.toml
+root = "."
+tmp_dir = "tmp"
+[build]
+cmd = "go mod tidy && go build -o ./tmp/main ."
+bin = "tmp/main"
+include_ext = ["go"]
+exclude_dir = ["vendor", "tmp"]
+exclude_file = ["*.gen.go"]
+delay = 1000 # ms
+full_rebuild = false
+[log]
+level = "info"
+[serve]
+cmd = "./tmp/main"
+delay = 500 # ms

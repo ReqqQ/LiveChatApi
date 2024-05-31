@@ -1,0 +1,13 @@
+# live-api/build/Dockerfile-vue
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Skopiuj pliki projektu do kontenera
+COPY ../live-www/ .
+
+RUN npm install
+
+EXPOSE 8080
+
+CMD ["npm", "run", "dev"]
