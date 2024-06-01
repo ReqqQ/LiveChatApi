@@ -9,7 +9,7 @@ services:
       - ../../live-www:/app
       - /app/node_modules
     ports:
-      - "8080:8080"
+      - "5173:5173"
     networks:
       - app-network
 
@@ -24,7 +24,7 @@ services:
     depends_on:
       - vue-app
     ports:
-      - "8081:8081"
+      - "3000:3000"
 
   nginx:
     build:
