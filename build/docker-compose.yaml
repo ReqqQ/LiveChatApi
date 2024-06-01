@@ -12,6 +12,11 @@ services:
       - "5173:5173"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5173 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   go-app:
     build:
