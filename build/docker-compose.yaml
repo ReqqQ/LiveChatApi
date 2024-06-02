@@ -1,20 +1,30 @@
 version: '3.8'
 
 services:
+  cert-gen:
+    build:
+      context: ../
+      dockerfile: build/Dockerfile-cert-gen
+    container_name: cert-gen
+    volumes:
+      - live-api-certs:/etc/ssl
+    command: ["sleep", "infinity"]
+
   live-api:
     build:
-      context: ..
+      context: ../
       dockerfile: build/Dockerfile-go
     container_name: live-api
-    volumes:
-      - ../:/app
-      - live-api-certs:/etc/ssl
     ports:
       - "443:443"
     environment:
       - GO111MODULE=on
       - CGO_ENABLED=0
+    volumes:
+      - live-api-certs:/etc/ssl
     command: ["/app/main"]
+    depends_on:
+      - cert-gen
 
   live-www:
     build:
@@ -25,17 +35,21 @@ services:
       - "5173:5173"
     environment:
       - VITE_DEV_SERVER_HOST=0.0.0.0
+    depends_on:
+      - cert-gen
 
   nginx:
     build:
-      context: ..
+      context: ../
       dockerfile: build/Dockerfile-nginx
     container_name: nginx
     ports:
-      - "443:443"
+      - "9443:443"
     volumes:
       - live-api-certs:/etc/ssl
-      - ..//build/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../build/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - cert-gen
 
 volumes:
   live-api-certs:
