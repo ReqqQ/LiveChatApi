@@ -3,7 +3,7 @@ version: '3.8'
 services:
   cert-gen:
     build:
-      context: ../
+      context: ..
       dockerfile: build/Dockerfile-cert-gen
     container_name: cert-gen
     volumes:
@@ -12,11 +12,11 @@ services:
 
   live-api:
     build:
-      context: ../
+      context: ..
       dockerfile: build/Dockerfile-go
     container_name: live-api
     ports:
-      - "443:443"
+      - "4443:4443"
     environment:
       - GO111MODULE=on
       - CGO_ENABLED=0
@@ -40,14 +40,14 @@ services:
 
   nginx:
     build:
-      context: ../
+      context: ..
       dockerfile: build/Dockerfile-nginx
     container_name: nginx
     ports:
-      - "9443:443"
+      - "443:443"
     volumes:
       - live-api-certs:/etc/ssl
-      - ../build/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - cert-gen
 

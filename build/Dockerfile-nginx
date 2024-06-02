@@ -1,7 +1,5 @@
-# Base image for Nginx
 FROM nginx:latest
 
-# Kopiowanie plików konfiguracyjnych
 COPY build/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 443
