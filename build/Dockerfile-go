@@ -1,23 +1,13 @@
-# live-api/build/Dockerfile-go
-FROM golang:1.22-alpine
+# Etap budowania aplikacji Go
+FROM golang:1.22 AS builder
 
 WORKDIR /app
 
-# Install air for live reload
-RUN go install github.com/cosmtrek/air@latest
-
-# Skopiuj pliki go.mod i go.sum
-COPY live-api/go.mod ./
-
-# Pobierz zależności
+COPY go.mod go.sum ./
 RUN go mod download
 
-# Skopiuj resztę plików projektu
-COPY live-api/ ./
+COPY . .
 
-# Zaktualizuj moduły Go
-RUN go mod tidy
+RUN go build -o main .
 
-EXPOSE 8081
-
-CMD ["air", "-c", ".air.toml"]
+CMD ["/app/main"]

@@ -1,17 +1,32 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v3"
+	"log"
+	"net/http"
+
+	"github.com/quic-go/quic-go/http3"
 )
 
 func main() {
-	app := fiber.New()
-
-	app.Get(
-		"/api", func(c fiber.Ctx) error {
-			return c.SendString("Hello, World!")
+	mux := http.NewServeMux()
+	mux.HandleFunc(
+		"/api", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Hello, HTTP/3 and WebTransport!"))
 		},
 	)
 
-	app.Listen(":3000")
+	// Handler for WebTransport
+	mux.HandleFunc(
+		"/webtransport", func(w http.ResponseWriter, r *http.Request) {
+			// Handle WebTransport logic here
+			w.Write([]byte("WebTransport endpoint"))
+		},
+	)
+
+	server := http3.Server{
+		Addr:    ":443",
+		Handler: mux,
+	}
+
+	log.Fatal(server.ListenAndServeTLS("/etc/ssl/certs/nginx-selfsigned.crt", "/etc/ssl/private/nginx-selfsigned.key"))
 }
