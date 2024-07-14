@@ -17,10 +17,10 @@ func main() {
 
 	// TLS configuration
 	listenConfig := fiber.ListenConfig{
-		CertFile:    "cert.pem",
-		CertKeyFile: "key.pem",
+		CertFile:    "./keys/cert.pem",
+		CertKeyFile: "./keys/key.pem",
 	}
 
 	// Listen on port 443 with TLS
-	log.Fatal(app.Listen(":443", listenConfig))
+	log.Fatal(app.Listen(":4433", listenConfig))
 }

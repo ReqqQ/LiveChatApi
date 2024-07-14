@@ -9,6 +9,7 @@ services:
       - "443:443"
     depends_on:
       - kafka
+      - db
 
   frontend:
     build:
@@ -36,3 +37,12 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: yourdb
+      POSTGRES_USER: youruser
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - "5432:5432"
